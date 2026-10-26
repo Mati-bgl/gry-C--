@@ -48,7 +48,11 @@ int main()
     waz.push_back({10, 8});
     waz.push_back({10, 9});
 
-    sf::RectangleShape kwadrat;
+    sf::Texture plansza;
+    plansza.loadFromFile("szachownica.png");
+    sf::Sprite plansza1;
+    plansza1.setTexture(plansza);
+
     sf::Clock stoper;
 
     int owoc_x = 2;
@@ -58,6 +62,7 @@ int main()
 
     while (okno.isOpen())
     {
+        okno.clear();
 
         while (const optional zdarzenie = okno.pollEvent()) // pobieranie akcji
         {
@@ -75,29 +80,8 @@ int main()
                 }
             }
         }
-        // zrobienie kratki na ekranie
-        for (int w = 0; w < wiersze; w++)
-        {
-            for (int k = 0; k < kolumny; k++)
-            {
-
-                int x = k * kafalek;
-                int y = w * kafalek;
-
-                if ((k + w) % 2 == 0)
-                {
-                    kwadrat.setFillColor(sf::Color(64, 64, 64));
-                }
-                else
-                {
-                    kwadrat.setFillColor(sf::Color::Black);
-                }
-                kwadrat.setSize({kafalek, kafalek});
-
-                kwadrat.setPosition({x, y});
-                okno.draw(kwadrat);
-            }
-        }
+        plansza1.setPosition({0, 0});
+         okno.draw(plansza1);
 
         owoc.setPosition({owoc_x * kafalek + 4, owoc_y * kafalek + 4});
         // kierowanie
@@ -204,7 +188,7 @@ int main()
         for (int i = 1; i < waz.size(); i++)
         {
             segment b = waz[i];
-            if ((a.x == b.x && a.y == b.y)||(a.x <0||a.x>20||a.y <0||a.y>15))
+            if ((a.x == b.x && a.y == b.y) || (a.x < 0 || a.x > 20 || a.y < 0 || a.y > 15))
             {
                 Sleep(1000);
                 waz.clear();
@@ -213,10 +197,9 @@ int main()
                 waz.push_back({10, 9});
                 obecny_kierunek = gora;
                 stoper.restart();
-                
             }
         }
-
+       
         okno.draw(owoc);
         okno.display();
     }
