@@ -8,6 +8,8 @@
 
 using namespace std;
 
+
+
 enum kierunek
 {
     gora,
@@ -36,9 +38,22 @@ int main()
     srand(time(NULL));
 
     // ustawienie obiektów i ich wstepne własności
+  sf::Texture borowki;
+    borowki.loadFromFile("borowki.png");
+sf::Sprite owoc1(borowki);
+  int borowki_x = 2;
+    int borowki_y = 1;
 
-    sf::CircleShape owoc(12.0f);
-    owoc.setFillColor(sf::Color::White);
+  sf::Texture jablka;
+    jablka.loadFromFile("jablka.png");
+
+  sf::Texture wisnia;
+    wisnia.loadFromFile("wisnia.png");
+sf::Sprite owoc2(wisnia);
+  int owoc2_x = 9;
+    int owoc2_y = 9;
+
+    
 
     sf::RectangleShape snake;
     snake.setSize({30.0f, 30.0f});
@@ -50,13 +65,11 @@ int main()
 
     sf::Texture plansza;
     plansza.loadFromFile("szachownica.png");
-    sf::Sprite plansza1;
-    plansza1.setTexture(plansza);
+sf::Sprite plansza1(plansza);
 
     sf::Clock stoper;
 
-    int owoc_x = 2;
-    int owoc_y = 1;
+  
 
     bool miejsce; // zmienna czy jest wolne pole
 
@@ -81,9 +94,10 @@ int main()
             }
         }
         plansza1.setPosition({0, 0});
-         okno.draw(plansza1);
+        okno.draw(plansza1);
 
-        owoc.setPosition({owoc_x * kafalek + 4, owoc_y * kafalek + 4});
+        owoc1.setPosition({borowki_x * kafalek, borowki_y * kafalek});
+        owoc2.setPosition({owoc2_x * kafalek, owoc2_y * kafalek});
         // kierowanie
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
         {
@@ -145,27 +159,81 @@ int main()
             }
 
             waz.push_front(a); // sprawdzanie czy owoc zjedzony
-            if (a.x == owoc_x && a.y == owoc_y)
+            if (a.x == borowki_x && a.y == borowki_y)
             {
                 // nowa pozycja owocu
                 miejsce = false;
                 while (miejsce == false)
                 {
-                    owoc_x = rand() % 20;
-                    owoc_y = rand() % 15;
+                    borowki_x = rand() % 20;
+                    borowki_y = rand() % 15;
                     miejsce = true;
+                    switch (rand() % 3)
+                    {
+                    case 0:
+                        owoc1.setTexture(borowki);
+                        break;
+                        case 1:
+                        owoc1.setTexture(jablka);
+                        break;
+                        case 2:
+                        owoc1.setTexture(wisnia);
+                        break;
+                    
+                    default:
+                        break;
+                    }
                     for (int i = 0; i < waz.size(); i++)
                     {
                         segment b = waz[i];
-                        if (owoc_x == b.x && owoc_y == b.y)
+                        if (borowki_x == b.x && borowki_y == b.y)
                         {
                             miejsce = false;
                             break;
                         }
                     }
-                    owoc.setPosition({owoc_x * kafalek + 4, owoc_y * kafalek + 4});
+                    owoc1.setPosition({borowki_x * kafalek, borowki_y * kafalek});
                 }
             }
+            else if (a.x == owoc2_x && a.y == owoc2_y)
+            {
+                 // nowa pozycja owocu
+                miejsce = false;
+                while (miejsce == false)
+                {
+                    owoc2_x = rand() % 20;
+                    owoc2_y = rand() % 15;
+                    miejsce = true;
+
+                    switch (rand() % 3)
+                    {
+                    case 0:
+                        owoc2.setTexture(borowki);
+                        break;
+                        case 1:
+                        owoc2.setTexture(jablka);
+                        break;
+                        case 2:
+                        owoc2.setTexture(wisnia);
+                        break;
+                    
+                    default:
+                        break;
+                    }
+                    for (int i = 0; i < waz.size(); i++)
+                    {
+                        segment b = waz[i];
+                        if (owoc2_x == b.x && owoc2_y == b.y)
+                        {
+                            miejsce = false;
+                            break;
+                        }
+                    }
+                    owoc2.setPosition({
+                        owoc2_x * kafalek, owoc2_y * kafalek});
+            }
+        }
+            
             else
             {
                 waz.pop_back();
@@ -199,8 +267,9 @@ int main()
                 stoper.restart();
             }
         }
-       
-        okno.draw(owoc);
+
+        okno.draw(owoc1);
+        okno.draw(owoc2);
         okno.display();
     }
 
