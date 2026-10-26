@@ -53,11 +53,17 @@ sf::Sprite owoc2(wisnia);
   int owoc2_x = 9;
     int owoc2_y = 9;
 
-    
 
-    sf::RectangleShape snake;
-    snake.setSize({30.0f, 30.0f});
-    snake.setFillColor(sf::Color::White);
+    sf::Texture glowa;
+    glowa.loadFromFile("glowa.png");
+    sf::Sprite glowa_s(glowa);
+    glowa_s.setOrigin({16.0f, 16.0f});
+
+    sf::Texture cialo;
+    cialo.loadFromFile("cialo.png");
+    sf::Sprite cialo_s(cialo);
+
+
     deque<segment> waz;
     waz.push_back({10, 7});
     waz.push_back({10, 8});
@@ -140,25 +146,52 @@ sf::Sprite plansza1(plansza);
 
             case gora:
                 a.y -= 1;
+                glowa_s.setRotation(sf::degrees(0.f));
                 break;
 
             case dol:
                 a.y += 1;
+                glowa_s.setRotation(sf::degrees(180.f));
                 break;
 
             case prawo:
                 a.x += 1;
+                glowa_s.setRotation(sf::degrees(90.f));
                 break;
 
             case lewo:
                 a.x -= 1;
+                glowa_s.setRotation(sf::degrees(270.f));
                 break;
 
             default:
                 break;
             }
 
-            waz.push_front(a); // sprawdzanie czy owoc zjedzony
+             //pojawianie sie po drugiej stronie ekranu
+        if(a.x <0)
+        {
+            a.x =19;
+
+        }
+         if(a.x >20)
+        {
+            a.x = 0;
+        }
+         if(a.y <0)
+        {
+            a.y = 14;
+            
+        }
+         if(a.y >15)
+        {
+            a.y = 0;
+            
+        }
+
+
+            waz.push_front(a);
+             // sprawdzanie czy owoc zjedzony
             if (a.x == borowki_x && a.y == borowki_y)
             {
                 // nowa pozycja owocu
@@ -242,21 +275,27 @@ sf::Sprite plansza1(plansza);
             stoper.restart();
         }
         // pokazywanie węża na ekranie
-        for (int i = 0; i < waz.size(); i++)
+
+     
+
+glowa_s.setPosition({a.x* kafalek +16.0f, a.y* kafalek +16.0f});
+            okno.draw(glowa_s);
+
+        for (int i = 1; i < waz.size(); i++)
         {
             segment b; // zmienna pomocna
             b = waz[i];
-            b.x = b.x * kafalek + 1;
-            b.y = b.y * kafalek + 1;
+            b.x = b.x * kafalek;
+            b.y = b.y * kafalek;
 
-            snake.setPosition({b.x, b.y});
-            okno.draw(snake);
+            cialo_s.setPosition({b.x, b.y});
+            okno.draw(cialo_s);
         }
         // sprawdzanie smierci
         for (int i = 1; i < waz.size(); i++)
         {
             segment b = waz[i];
-            if ((a.x == b.x && a.y == b.y) || (a.x < 0 || a.x > 20 || a.y < 0 || a.y > 15))
+            if (a.x == b.x && a.y == b.y)
             {
                 Sleep(1000);
                 waz.clear();
