@@ -174,7 +174,7 @@ sf::Sprite plansza1(plansza);
             a.x =19;
 
         }
-         if(a.x >20)
+         if(a.x >=20)
         {
             a.x = 0;
         }
@@ -183,7 +183,7 @@ sf::Sprite plansza1(plansza);
             a.y = 14;
             
         }
-         if(a.y >15)
+         if(a.y >=15)
         {
             a.y = 0;
             
